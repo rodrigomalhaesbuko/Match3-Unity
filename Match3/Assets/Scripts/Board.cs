@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+// Aux struct to pass positional data 
 public struct Point
 {
     public int row;
@@ -69,6 +70,12 @@ public class Board
         }
 
         BoardPieces = boardMatrix;
+        
+        // Check if the board is impossible to play. If it is create another board. 
+        if (CheckImpossibleBoard())
+        {
+            CreateBoard();
+        }
     }
 
     // return the list of points of the FIRST match3 found. Return null if NO match3 was found 
@@ -122,6 +129,68 @@ public class Board
         }
 
         return null;
+    }
+
+    // Verify if there is an possible move for the player 
+    public bool CheckImpossibleBoard()
+    {
+        // Its possible to avoid the boarder in this logic because the all boarder pices will be covered with the middle pieces 
+        for (int i = 0; i < colls; i++)
+        {
+            for (int j = 0; j < rows; j++)
+            {
+                Point actualPoint = new Point(j, i);
+                List<Point> points = new List<Point>();
+                
+                // up
+                if(j != rows -1)
+                    points.Add(new Point(j + 1, i));
+                //down
+                if(j != 0)
+                    points.Add(new Point(j - 1, i));
+                //left
+                if(i != 0 )
+                    points.Add(new Point(j , i - 1));
+                //right
+                if(i != colls -1)
+                    points.Add(new Point(j, i + 1));
+
+                foreach (Point point in points)
+                {
+                    if (Swap(actualPoint, point))
+                    {
+                        return false; 
+                    }
+                }
+            }
+        }
+
+        return true; 
+    }
+
+    // Verify if swaping two points a Match3 occurs
+    public bool Swap(Point a, Point b)
+    {
+        int[,] originalBoard = BoardPieces;
+        int aux = BoardPieces[a.row,a.coll];
+        // SWAP
+        BoardPieces[a.row, a.coll] = BoardPieces[b.row, b.coll];
+        BoardPieces[b.row, b.coll] = aux;
+        List<Point> possiblePoints = CheckMatch3();
+        
+        // SWAP AGAIN 
+        int auxB = BoardPieces[a.row, a.coll];
+        
+        BoardPieces[a.row, a.coll] = aux;
+        BoardPieces[b.row, b.coll] = auxB;
+        
+        
+        if ( possiblePoints != null)
+        {
+            return true; 
+        }
+        
+        return false;
     }
     
 }
