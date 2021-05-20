@@ -96,4 +96,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoardHolder: {fileID: 0}
-  dragSpeed: 20
+  dragSpeed: 8

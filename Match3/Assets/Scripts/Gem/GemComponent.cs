@@ -40,41 +40,53 @@ public class GemComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Verify if the player is using desktop or mobile 
+        if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
+        {
+            ManageTouch();
+        }
+        else
+        {
+            ManageMouse();
+        }
+
+    }
+
+    private void ManageMouse()
+    {
         // Get Touch 
-        Vector3 touchPos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            touchPos.z = -2;
+        Vector3 mousePos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = -2;
             
-            // Select the gem 
-            if (Input.GetMouseButtonDown(0))
-            {
-                // check if the gem is around touch pos
-                Vector3 gemPos = _transform.position;
+        // Select the gem 
+        if (Input.GetMouseButtonDown(0))
+        {
+            // check if the gem is around touch pos
+            Vector3 gemPos = _transform.position;
 
-                if ((touchPos.x < gemPos.x + _xOffset && touchPos.x > gemPos.x - _yOffset) &&
-                    (touchPos.y < gemPos.y + _yOffset && touchPos.y > gemPos.y - _yOffset))
-                {
-                    ChangeSelected(true);
-                }
-
-                _lastMousePos = touchPos;
-            }
-            
-            if (Input.GetMouseButton(0) && (_lastMousePos != touchPos) && _isSelected)
+            if ((mousePos.x < gemPos.x + _xOffset && mousePos.x > gemPos.x - _yOffset) &&
+                (mousePos.y < gemPos.y + _yOffset && mousePos.y > gemPos.y - _yOffset))
             {
-                float step = dragSpeed * Time.fixedTime;
-                _transform.position = Vector3.MoveTowards(_transform.position, touchPos, step);
+                ChangeSelected(true);
             }
 
-            if (Input.GetMouseButtonUp(0))
-            {
-                // verify if this is a match3 move 
+            _lastMousePos = mousePos;
+        }
+            
+        if (Input.GetMouseButton(0) && (_lastMousePos != mousePos) && _isSelected)
+        {
+            float step = dragSpeed * Time.fixedTime;
+            _transform.position = Vector3.MoveTowards(_transform.position, mousePos, step);
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            // verify if this is a match3 move 
                 
-                // if not return the gem to original position and isSelect = false 
-                ChangeSelected(false);
-                StartCoroutine(ReturnToOriginalPos());
-            }
-        
-
+            // if not return the gem to original position and isSelect = false 
+            ChangeSelected(false);
+            StartCoroutine(ReturnToOriginalPos());
+        }
     }
 
     private void ManageTouch()
