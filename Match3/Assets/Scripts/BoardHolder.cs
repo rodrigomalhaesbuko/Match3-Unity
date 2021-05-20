@@ -43,8 +43,8 @@ public class BoardHolder : MonoBehaviour
                 // discover gem sprite (-1 because the pieces vary in range 1..gemsSprites.Count )
                 Sprite gemSprite = gemsSprites[_board.BoardPieces[i, j] - 1];
                 Vector2 pos = _transform.position;
-                pos.x = xDistance;
-                pos.y = yDistance;
+                pos.x += xDistance;
+                pos.y += yDistance;
                 GameObject newGem = Instantiate(gemPrefab, pos, _transform.rotation);
                 newGem.GetComponent<SpriteRenderer>().sprite = gemSprite;
                 yDistance += yOffset;
