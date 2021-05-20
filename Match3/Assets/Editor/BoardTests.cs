@@ -15,7 +15,7 @@ public class BoardTests
       
       // VERIFY BOUNDS OF BOARD 
       Assert.That(board.rows, Is.EqualTo(10));
-      Assert.That(board.colls, Is.EqualTo(5));
+      Assert.That(board.cols, Is.EqualTo(5));
       
       // verify if its possible to create the board 
       Board brokenBoard = new Board(2, 10, 5);
@@ -38,7 +38,7 @@ public class BoardTests
       // Horizontal test 
       int[,] testA =  { { 1, 1, 1 }, { 1, 4, 2 }, { 5, 6, 9 }, { 7, 8, 9 } };
       board.BoardPieces = testA;
-      board.colls = 3;
+      board.cols = 3;
       board.rows = 4;
       List<Point> points = new List<Point>();
       points.Add(new Point(0,0));
@@ -50,7 +50,7 @@ public class BoardTests
       // Vertical test
       int[,] testB = { { 1, 2, 1 }, { 1, 4, 2 }, { 1, 6, 9 }, { 7, 8, 9 } };
       board.BoardPieces = testB;
-      board.colls = 3;
+      board.cols = 3;
       board.rows = 4;
       List<Point> pointsB = new List<Point>();
       pointsB.Add(new Point(0,0));
@@ -71,7 +71,7 @@ public class BoardTests
       // Impossible board test
       int[,] testA = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }};
       board.BoardPieces = testA;
-      board.colls = 3;
+      board.cols = 3;
       board.rows = 3;
       
       Assert.That(board.CheckImpossibleBoard, Is.EqualTo(true));
@@ -79,7 +79,7 @@ public class BoardTests
       // Impossible board test
       int[,] testB = { { 2, 1, 1 }, { 1, 4, 2 }, { 4, 6, 9 } };
       board.BoardPieces = testB;
-      board.colls = 3;
+      board.cols = 3;
       board.rows = 3;
       
       //PrintBoard(board); // debug option to show the board 
@@ -89,7 +89,7 @@ public class BoardTests
       Board boardC = new Board(3, 4, 4);
       int[,] testC = { { 1, 2, 1, 1 }, { 1, 4, 2 , 9}, { 4, 6, 13, 5 }, { 7, 8, 9, 5 } };
       boardC.BoardPieces = testC;
-      boardC.colls = 4;
+      boardC.cols = 4;
       boardC.rows = 4;
       
       //PrintBoard(board); // debug option to show the board 
@@ -104,7 +104,7 @@ public class BoardTests
       Board board = new Board(3, 4, 4);
       int[,] test = { { 2, 1, 1 }, { 1, 4, 2 }, { 4, 6, 9 }, { 7, 8, 9 } };
       board.BoardPieces = test;
-      board.colls = 3;
+      board.cols = 3;
       board.rows = 4;
       
       //PrintBoard(board); // debug option to show the board 
@@ -115,7 +115,7 @@ public class BoardTests
       Board boardB = new Board(3, 4, 4);
       int[,] testB = { { 1, 2, 1, 1 }, { 1, 4, 2 , 9}, { 4, 6, 13, 5 }, { 7, 8, 9, 5 } };
       boardB.BoardPieces = testB;
-      boardB.colls = 4;
+      boardB.cols = 4;
       boardB.rows = 4;
       
       //PrintBoard(board); // debug option to show the board 
@@ -129,7 +129,7 @@ public class BoardTests
       Board board = new Board(9, 4, 4);
       int[,] test = { { 1, 1, 1 }, { 7, 4, 2 }, { 4, 6, 9 }, { 7, 8, 9 } };
       board.BoardPieces = test;
-      board.colls = 3;
+      board.cols = 3;
       board.rows = 4;
       List<Point> points = new List<Point>();
       points.Add(new Point(0,0));
@@ -149,7 +149,7 @@ public class BoardTests
       for (int i = board.rows - 1; i >= 0; i--)
       {
          List<int> row = new List<int>() ;
-         for (int j = 0; j < board.colls; j++)
+         for (int j = 0; j < board.cols; j++)
          {
             row.Add(board.BoardPieces[i,j]);
          } 

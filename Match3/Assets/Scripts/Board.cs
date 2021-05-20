@@ -7,12 +7,12 @@ using System.Linq;
 public struct Point
 {
     public int row;
-    public int coll;
+    public int col;
 
-    public Point(int row, int coll)
+    public Point(int row, int col)
     {
         this.row = row;
-        this.coll = coll;
+        this.col = col;
     }
 }
 
@@ -21,13 +21,13 @@ public class Board
     public int[,] BoardPieces; // model of the game board 
     readonly int _numberOfPieces; // total number of diferent game pieces 
     public int rows;
-    public int colls;
+    public int cols;
 
-    public Board(int totalPieces, int rowsNumber, int collsNumber)
+    public Board(int totalPieces, int rowsNumber, int colsNumber)
     {
         _numberOfPieces = totalPieces;
         rows = rowsNumber;
-        colls = collsNumber;
+        cols = colsNumber;
         CreateBoard();
     }
 
@@ -41,7 +41,7 @@ public class Board
             return;
         }
         
-        int[,] boardMatrix = new int[rows,colls];
+        int[,] boardMatrix = new int[rows,cols];
         // variables to avoid starting with a match 
         int[] previousLeft = new int[rows];
         int previousBelow = 0;
@@ -50,7 +50,7 @@ public class Board
         List<int> allPieces = Enumerable.Range(1, _numberOfPieces).ToList();
         
         //Create the model of the game board with integers 
-        for (int i = 0; i < colls; i++)
+        for (int i = 0; i < cols; i++)
         {
             for (int j = 0; j < rows; j++)
             {
@@ -83,16 +83,16 @@ public class Board
     {
         List<Point> points = new List<Point>();
        
-        for (int i = 0; i < colls; i++)
+        for (int i = 0; i < cols; i++)
         {
             for (int j = 0; j < rows; j++)
             {
                 // Can exclude the corners 
-                if ((j == 0 && i == 0) || (j == rows -1 && i == colls-1) || (j == rows-1 && i == 0) || (j == 0 && i == colls-1))
+                if ((j == 0 && i == 0) || (j == rows -1 && i == cols-1) || (j == rows-1 && i == 0) || (j == 0 && i == cols-1))
                     continue;
                 
                 // Check horizontal match 3 
-                if (i != 0 && i != colls - 1)
+                if (i != 0 && i != cols - 1)
                 {
                     int middlePiece = BoardPieces[j, i];
                     int leftPiece = BoardPieces[j, i - 1];
@@ -135,7 +135,7 @@ public class Board
     public bool CheckImpossibleBoard()
     {
         // Its possible to avoid the boarder in this logic because the all boarder pices will be covered with the middle pieces 
-        for (int i = 0; i < colls; i++)
+        for (int i = 0; i < cols; i++)
         {
             for (int j = 0; j < rows; j++)
             {
@@ -151,7 +151,7 @@ public class Board
                 if(i != 0 )
                     points.Add(new Point(j , i - 1));
                 //right
-                if(i != colls -1)
+                if(i != cols -1)
                     points.Add(new Point(j, i + 1));
 
                 foreach (Point point in points)
@@ -171,17 +171,17 @@ public class Board
     public List<Point> Swap(Point a, Point b)
     {
         int[,] originalBoard = BoardPieces;
-        int aux = BoardPieces[a.row,a.coll];
+        int aux = BoardPieces[a.row,a.col];
         // SWAP
-        BoardPieces[a.row, a.coll] = BoardPieces[b.row, b.coll];
-        BoardPieces[b.row, b.coll] = aux;
+        BoardPieces[a.row, a.col] = BoardPieces[b.row, b.col];
+        BoardPieces[b.row, b.col] = aux;
         List<Point> possiblePoints = CheckMatch3();
         
         // SWAP AGAIN 
-        int auxB = BoardPieces[a.row, a.coll];
+        int auxB = BoardPieces[a.row, a.col];
         
-        BoardPieces[a.row, a.coll] = aux;
-        BoardPieces[b.row, b.coll] = auxB;
+        BoardPieces[a.row, a.col] = aux;
+        BoardPieces[b.row, b.col] = auxB;
 
         // can be null or the Match3 points 
         return possiblePoints;
@@ -196,12 +196,12 @@ public class Board
             int row;
             for (row = point.row; row < rows - 1; row++)
             {
-                BoardPieces[row, point.coll] = BoardPieces[row + 1, point.coll];
+                BoardPieces[row, point.col] = BoardPieces[row + 1, point.col];
             }
             
             // add in the last row an random piece 
             List<int> allPieces = Enumerable.Range(1, _numberOfPieces).ToList();
-            BoardPieces[row, point.coll] = allPieces[Random.Range(0, allPieces.Count)];;
+            BoardPieces[row, point.col] = allPieces[Random.Range(0, allPieces.Count)];;
         }
     }
 
