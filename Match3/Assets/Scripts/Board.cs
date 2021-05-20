@@ -141,7 +141,6 @@ public class Board
             {
                 Point actualPoint = new Point(j, i);
                 List<Point> points = new List<Point>();
-                
                 // up
                 if(j != rows -1)
                     points.Add(new Point(j + 1, i));
@@ -157,7 +156,7 @@ public class Board
 
                 foreach (Point point in points)
                 {
-                    if (Swap(actualPoint, point))
+                    if (Swap(actualPoint, point) != null)
                     {
                         return false; 
                     }
@@ -169,7 +168,7 @@ public class Board
     }
 
     // Verify if swaping two points a Match3 occurs
-    public bool Swap(Point a, Point b)
+    public List<Point> Swap(Point a, Point b)
     {
         int[,] originalBoard = BoardPieces;
         int aux = BoardPieces[a.row,a.coll];
@@ -183,14 +182,28 @@ public class Board
         
         BoardPieces[a.row, a.coll] = aux;
         BoardPieces[b.row, b.coll] = auxB;
-        
-        
-        if ( possiblePoints != null)
-        {
-            return true; 
-        }
-        
-        return false;
+
+        // can be null or the Match3 points 
+        return possiblePoints;
     }
+
+    // Erase pieces in specific points in board and apply the cascade effect 
+    public void ErasePieces(List<Point> pointsToErase)
+    {
+        foreach (Point point in pointsToErase)
+        { 
+            // empty space
+            int row;
+            for (row = point.row; row < rows - 1; row++)
+            {
+                BoardPieces[row, point.coll] = BoardPieces[row + 1, point.coll];
+            }
+            
+            // add in the last row an random piece 
+            List<int> allPieces = Enumerable.Range(1, _numberOfPieces).ToList();
+            BoardPieces[row, point.coll] = allPieces[Random.Range(0, allPieces.Count)];;
+        }
+    }
+
     
 }

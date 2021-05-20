@@ -11,7 +11,7 @@ public class BoardTests
    {
       // VERIFY IF STARTS WITH A MATCH3 
       Board board = new Board(3, 10, 5);
-      PrintBoard(board);
+      //PrintBoard(board);// debug option to show the board 
       
       // VERIFY BOUNDS OF BOARD 
       Assert.That(board.rows, Is.EqualTo(10));
@@ -31,7 +31,7 @@ public class BoardTests
    public void CheckMatch3_Test()
    {
       Board board = new Board(3, 4, 4);
-      PrintBoard(board);
+      // PrintBoard(board); // debug option to show the board 
       // Dont match3 test 
       Assert.That(board.CheckMatch3(), Is.EqualTo(null));
       
@@ -108,7 +108,7 @@ public class BoardTests
       board.rows = 4;
       
       //PrintBoard(board); // debug option to show the board 
-      Assert.That(board.Swap(new Point(0,0),new Point(1,0)), Is.EqualTo(true));
+      Assert.That(board.Swap(new Point(0,0),new Point(1,0)) != null, Is.EqualTo(true));
       //PrintBoard(board); // debug option to show the board 
       
       // Swap horizontal 
@@ -119,10 +119,29 @@ public class BoardTests
       boardB.rows = 4;
       
       //PrintBoard(board); // debug option to show the board 
-      Assert.That(boardB.Swap(new Point(0,0),new Point(0,1)), Is.EqualTo(true));
-      
+      Assert.That(boardB.Swap(new Point(0,0) ,new Point(0,1)) != null, Is.EqualTo(true));
    }
-   
+
+   [Test]
+   public void ErasePiece_Test()
+   {
+      // verify if the erased points give theirs places to theirs upper neighbors 
+      Board board = new Board(9, 4, 4);
+      int[,] test = { { 1, 1, 1 }, { 7, 4, 2 }, { 4, 6, 9 }, { 7, 8, 9 } };
+      board.BoardPieces = test;
+      board.colls = 3;
+      board.rows = 4;
+      List<Point> points = new List<Point>();
+      points.Add(new Point(0,0));
+      points.Add(new Point(0,1));
+      points.Add(new Point(0,2));
+      board.ErasePieces(points);
+      PrintBoard(board);
+      int[,] expect = {{7, 4, 2}}; // second row that will be the first one 
+      int[,] real = {{board.BoardPieces[0,0],board.BoardPieces[0,1] , board.BoardPieces[0,2]}}; // second row that will be the first one
+      
+      Assert.That(real, Is.EqualTo(expect));
+   }
 
    // HELPER FUNCTION TO SHOW THE BOARD IN CONSOLE 
    private void PrintBoard(Board board)
