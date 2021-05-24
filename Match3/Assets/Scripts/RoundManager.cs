@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using  UnityEngine.UI;
+using UnityEngine.UI;
 
 public class RoundManager : MonoBehaviour
 {
@@ -15,7 +15,13 @@ public class RoundManager : MonoBehaviour
     public Text timerText;
     public Text currentPointsText;
     public Text goalPointsText;
-    
+    public GameObject youLose;
+    public GameObject nextRound;
+    public GameObject cooldown;
+    public Text endTotalPoints;
+    public Text highScorePoints;
+    public Text cooldownText;
+
     // timer variables
     private bool _timerIsRunning = false;
     private float _timeRemaining;
@@ -24,9 +30,14 @@ public class RoundManager : MonoBehaviour
     [HideInInspector] public int totalPoints;
     [HideInInspector] public int totalPointsToGoal;
     
+    // Board holder reference 
+    private BoardHolder _boardHolder;
+    
     // Start is called before the first frame update
     void Start()
     {
+        // get board holder 
+        _boardHolder = gameObject.GetComponent<BoardHolder>();
         totalPoints = 0;
         totalPointsToGoal = 0;
         currentPointsText.text = totalPoints.ToString();
@@ -48,11 +59,14 @@ public class RoundManager : MonoBehaviour
     // called by board holder to start the round 
     public IEnumerator StartCooldown()
     {
-        for (int i = 1; i < 4; i++)
+        _boardHolder.paused = true;
+        cooldown.SetActive(true);
+        for (int i = 3; i > 0; i--)
         {
-            Debug.Log(i);
+            cooldownText.text = i.ToString();
             yield return new WaitForSeconds(1f);
         }
+        cooldown.SetActive(false);
         StartRound();
     }
 
@@ -62,19 +76,40 @@ public class RoundManager : MonoBehaviour
         goalPointsText.text = totalPointsToGoal.ToString();
         _timeRemaining = roundDuration;
         _timerIsRunning = true;
+        
+        // unpause the game 
+        _boardHolder.paused = false;
     }
 
     private void EndRound()
     {
-        Debug.Log("You Lost");
+        // pause the game 
+        _boardHolder.paused = true;
+        
+        // appear you lose 
+        youLose.SetActive(true);
+
         // save high score and go back to first scene 
+        int lastHighScore = PlayerPrefs.GetInt("HighScore");
+        if (totalPoints > lastHighScore)
+        {
+            PlayerPrefs.SetInt("HighScore", totalPoints);
+            lastHighScore = totalPoints;
+        }
+
+        // update You Lose UI 
+        endTotalPoints.text = totalPoints.ToString();
+        highScorePoints.text = lastHighScore.ToString();
     }
 
     private IEnumerator RoundWin()
     {
-        Debug.Log("Congratulations");
+        nextRound.SetActive(true);
         _timerIsRunning = false;
+        _boardHolder.paused = true;
         yield return new WaitForSeconds(1f);
+        nextRound.SetActive(false);
+        _boardHolder.paused = false;
         StartRound();
     }
     
