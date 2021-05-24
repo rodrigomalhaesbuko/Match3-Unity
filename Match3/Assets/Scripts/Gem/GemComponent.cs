@@ -56,7 +56,6 @@ public class GemComponent : MonoBehaviour
         // Verify if the player is using desktop or mobile 
         if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
         {
-            
             ManageTouch();
         }
         else
@@ -146,6 +145,9 @@ public class GemComponent : MonoBehaviour
         if (selected)
         {
             _isSelected = true;
+            // Debug.Log("Point");
+            // Debug.Log(positionInBoard.row);
+            // Debug.Log(positionInBoard.col);
             _transform.localScale *= 1.2f;
         }
         else

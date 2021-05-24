@@ -10,10 +10,7 @@ public class BoardHolder : MonoBehaviour
     public int rows;
     public int columns;
 
-    public float yOffset;
-    public float xOffset;
-
-    [Tooltip("Time that the game will be paused wainting for the next match in a chain of matchs")] 
+    [Tooltip("Time that the game will be paused waiting for the next match in a chain of matches (in seconds)")] 
     public float timeBetweenMatches;
     
     [HideInInspector]
@@ -44,6 +41,7 @@ public class BoardHolder : MonoBehaviour
         {
             // Y distance between sprites 
             float yDistance = 0f;
+            Vector2 spriteSize = Vector2.zero;
             for (int j = 0; j < _board.rows; j++)
             {
                 // discover gem sprite (-1 because the pieces vary in range 1..gemsSprites.Count )
@@ -54,13 +52,14 @@ public class BoardHolder : MonoBehaviour
                 GameObject newGem = Instantiate(gemPrefab, pos, _transform.rotation);
                 newGem.GetComponent<SpriteRenderer>().sprite = gemSprite;
                 GemComponent newGemComponent = newGem.GetComponent<GemComponent>();
+                spriteSize = newGem.GetComponent<SpriteRenderer>().bounds.size;
                 newGemComponent.BoardHolder = this;
                 newGemComponent.positionInBoard = new Point(j, i);
                 gemComponents[j, i] = newGemComponent;
-                yDistance += yOffset;
+                yDistance += spriteSize.y;
             }
     
-            xDistance += xOffset;
+            xDistance += spriteSize.x;
         }
 
         // receive reference of all gemComponents 
@@ -195,14 +194,18 @@ public class BoardHolder : MonoBehaviour
         List<Point> newPoints = _board.ErasePieces(points);
 
         yield return new WaitForSeconds(0.5f);
-        // distance that pieces will be dropped on board (2 slots above board)
-        float yDistance = (rows - 4) * yOffset;
+        
+        // position y of the highest row 
+        float yDistance = Gems[rows-1,columns-1].originalPos.y;
 
         // replace the erased pieces with new sprites based on model 
         foreach (Point newPoint in newPoints)
         {
             Sprite gemSprite = gemsSprites[_board.BoardPieces[newPoint.row, newPoint.col] - 1];
             GemComponent newGem = Gems[newPoint.row, newPoint.col];
+                        
+            // update y distance 
+            yDistance += newGem.sp.bounds.size.y;
             Vector3 posUp = newGem.originalPos;
             posUp.y += yDistance;
             newGem.transform.position = posUp;
@@ -213,9 +216,7 @@ public class BoardHolder : MonoBehaviour
             newGem.CircleCollider.enabled = true;
             newGem.dragSpeed = newGem.dragSpeedDeafaultValue; // Reset to default value 
             newGem.ChangeSelected(false);
-            
-            // update y distance 
-            yDistance += yOffset;
+
         }
         
         yield return new WaitForSeconds(timeBetweenMatches);

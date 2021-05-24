@@ -59,6 +59,20 @@ public class BoardTests
       pointsB.Add(new Point(2,0));
  
       Assert.That(board.CheckMatch3(), Is.EqualTo(pointsB));
+      
+      // Bigger match test 
+      int[,] testC = { { 1, 2, 1 }, { 1, 4, 2 }, { 1, 6, 9 }, { 1, 8, 9 } };
+      board.BoardPieces = testC;
+      board.cols = 3;
+      board.rows = 4;
+      List<Point> pointsC = new List<Point>();
+      pointsC.Add(new Point(0,0));
+      pointsC.Add(new Point(1,0));
+      pointsC.Add(new Point(2,0));
+      pointsC.Add(new Point(3,0));
+      
+      Assert.That(board.CheckMatch3(), Is.EqualTo(pointsC));
+
    }
 
    [Test]

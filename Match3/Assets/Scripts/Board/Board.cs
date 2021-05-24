@@ -21,7 +21,7 @@ public struct Point
 public class Board
 {
     public int[,] BoardPieces; // model of the game board 
-    readonly int _numberOfPieces; // total number of diferent game pieces 
+    private readonly int _numberOfPieces; // total number of different game pieces 
     public int rows;
     public int cols;
 
@@ -84,7 +84,6 @@ public class Board
     public List<Point> CheckMatch3()
     {
         List<Point> points = new List<Point>();
-        int matchPiece = 0; 
         for (int i = 0; i < cols; i++)
         {
             for (int j = 0; j < rows; j++)
@@ -100,7 +99,7 @@ public class Board
                     int leftPiece = BoardPieces[j, i - 1];
                     int rightPiece = BoardPieces[j, i + 1];
                     
-                    if ( middlePiece == leftPiece && middlePiece == rightPiece && (middlePiece == matchPiece || matchPiece == 0))
+                    if ( middlePiece == leftPiece && middlePiece == rightPiece)
                     {
                         // its a match 3 
                         points.Add(new Point(j,i-1));
@@ -136,7 +135,7 @@ public class Board
                     int upPiece = BoardPieces[j + 1, i];
                     int downPiece = BoardPieces[j - 1, i];
 
-                    if ( middlePiece == upPiece && middlePiece == downPiece && (middlePiece == matchPiece || matchPiece == 0))
+                    if ( middlePiece == upPiece && middlePiece == downPiece)
                     {
                         // its a match 3 
                         points.Add(new Point(j - 1,i));
@@ -174,7 +173,7 @@ public class Board
     // Verify if there is an possible move for the player 
     public bool CheckImpossibleBoard()
     {
-        // Its possible to avoid the boarder in this logic because the all boarder pices will be covered with the middle pieces 
+        // Its possible to avoid the boarder in this logic because the all boarder pieces will be covered with the middle pieces 
         for (int i = 0; i < cols; i++)
         {
             for (int j = 0; j < rows; j++)
@@ -207,7 +206,7 @@ public class Board
         return true; 
     }
 
-    // Verify if swaping two points a Match3 occurs
+    // Verify if swapping two points a Match3 occurs
     public List<Point> VerifySwap(Point a, Point b)
     {
         int aux = BoardPieces[a.row,a.col];
