@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class GemComponent : MonoBehaviour
 {
-
     [HideInInspector] public Point positionInBoard;
     [HideInInspector] public BoardHolder BoardHolder;
     public float dragSpeed;
     private Camera _mainCamera;
-
+    
+    [Header("Gems used on menu screen are dummy")]
+    public bool isDummyGem;
     
     // Variables used in boardHolder
     [HideInInspector] public Vector3 originalPos;
@@ -19,7 +20,7 @@ public class GemComponent : MonoBehaviour
     [HideInInspector] public CircleCollider2D CircleCollider;
     // private variables 
     private Transform _transform;
-    public Vector3 _originalLocalScale;
+    [HideInInspector] public Vector3 _originalLocalScale;
     private bool _isSelected;
     private float _xOffset;
     private float _yOffset;
@@ -50,7 +51,7 @@ public class GemComponent : MonoBehaviour
     void Update()
     {
         // cant move the gems when game is paused 
-        if(BoardHolder.paused)
+        if(BoardHolder.paused || isDummyGem)
             return;
         
         // Verify if the player is using desktop or mobile 

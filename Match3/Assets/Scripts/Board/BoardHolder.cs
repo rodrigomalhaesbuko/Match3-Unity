@@ -15,7 +15,7 @@ public class BoardHolder : MonoBehaviour
     
     [Tooltip("Number of rows to be offset in y position. this gives ui space on screen")] 
     public int rowsOffset;
-    
+
     [HideInInspector]
     public GemComponent[,] Gems;
 
@@ -37,7 +37,7 @@ public class BoardHolder : MonoBehaviour
         
         // adjust BoardHolder position 
         ResolvePosition();
-        
+
         //populate board 
         PopulateBoard();
     }
