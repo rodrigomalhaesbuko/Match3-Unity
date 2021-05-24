@@ -23,9 +23,14 @@ public class BoardHolder : MonoBehaviour
 
     private Board _board;
     private Transform _transform;
-    // Start is called before the first frame update
+
+    // round manager of the game 
+    private RoundManager _roundManager;
     void Start()
     {
+        // get round manager
+        _roundManager = gameObject.GetComponent<RoundManager>();
+        
         // create board 
         _board = new Board(gemsSprites.Count, rows, columns);
         _transform = transform;
@@ -111,6 +116,7 @@ public class BoardHolder : MonoBehaviour
             paused = true;
             // Swap in  board model 
             _board.Swap(gemSelected.positionInBoard,otherGem.positionInBoard);
+            
             // erase 
             StartCoroutine(CascadeEffect(possiblePoints));
         }
@@ -143,6 +149,9 @@ public class BoardHolder : MonoBehaviour
     {
         // wait piece to move to original position
         yield return new WaitForSeconds(0.5f);
+        
+        // update current points in game 
+        _roundManager.AddPoints(points.Count);
         
         if (points[0].col == points[1].col)
         {
