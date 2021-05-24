@@ -13,7 +13,7 @@ public class BoardHolder : MonoBehaviour
     [Tooltip("Time that the game will be paused waiting for the next match in a chain of matches (in seconds)")] 
     public float timeBetweenMatches;
     
-    [Tooltip("Number of rows to be offset in y position")] 
+    [Tooltip("Number of rows to be offset in y position. this gives ui space on screen")] 
     public int rowsOffset;
     
     [HideInInspector]
@@ -54,8 +54,6 @@ public class BoardHolder : MonoBehaviour
         newBoardHolderPos.y +=  0.5f * screenHeight/(rows + rowsOffset) ;
         newBoardHolderPos.x +=  0.5f * screenWidth/columns;
         
-        // rows offset 
-        newBoardHolderPos.y += rowsOffset * screenHeight/(rows + rowsOffset);
         _transform.position = newBoardHolderPos;
     }
 
