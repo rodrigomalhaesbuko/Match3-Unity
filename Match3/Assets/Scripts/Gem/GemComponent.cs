@@ -13,7 +13,7 @@ public class GemComponent : MonoBehaviour
 
     
     private Transform _transform;
-    private Vector3 _originalPos;
+    public Vector3 _originalPos;
     private Vector3 _originalLocalScale;
     private bool _isSelected;
     private float _xOffset;
@@ -21,6 +21,7 @@ public class GemComponent : MonoBehaviour
     
     // knows the movement of the mouse
     private Vector3 _lastMousePos;
+    
     // Start is called before the first frame update
     private void Start()
     {
@@ -40,9 +41,14 @@ public class GemComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // cant move the gems when game is paused 
+        if(BoardHolder.paused)
+            return;
+        
         // Verify if the player is using desktop or mobile 
         if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
         {
+            
             ManageTouch();
         }
         else
@@ -85,7 +91,6 @@ public class GemComponent : MonoBehaviour
                 
             // if not return the gem to original position and isSelect = false 
             ChangeSelected(false);
-            StartCoroutine(ReturnToOriginalPos());
         }
     }
 
@@ -123,27 +128,43 @@ public class GemComponent : MonoBehaviour
                 
                 // if not return the gem to original position and isSelect = false 
                 ChangeSelected(false);
-                StartCoroutine(ReturnToOriginalPos());
             }
         }
     }
 
-    private void ChangeSelected(bool selected)
+    // change gem state 
+    public void ChangeSelected(bool selected)
     {
         if (selected)
         {
             _isSelected = true;
             // change z position 
+            Debug.Log("GemPos");
+            Debug.Log(positionInBoard.row);
+            Debug.Log(positionInBoard.col);
             _transform.localScale *= 1.2f;
         }
         else
         {
             _isSelected = false;
             _transform.localScale = _originalLocalScale;
+            StartCoroutine(ReturnToOriginalPos());
         }
     }
 
-    private IEnumerator ReturnToOriginalPos()
+    // CHECK CONTACT WITH OTHER GEMS 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (_isSelected)
+        {
+            GemComponent otherGemComponent = other.gameObject.GetComponent<GemComponent>();
+            BoardHolder.CheckMatch3(this,otherGemComponent);
+        }
+
+    }
+
+    // Return to original pos when dragged of or selected is false
+    public IEnumerator ReturnToOriginalPos()
     {
         float step = dragSpeed * Time.fixedDeltaTime;
         while (_transform.position != _originalPos)

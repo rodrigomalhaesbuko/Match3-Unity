@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 // Aux struct to pass positional data 
 public struct Point
@@ -156,7 +158,7 @@ public class Board
 
                 foreach (Point point in points)
                 {
-                    if (Swap(actualPoint, point) != null)
+                    if (VerifySwap(actualPoint, point) != null)
                     {
                         return false; 
                     }
@@ -168,9 +170,8 @@ public class Board
     }
 
     // Verify if swaping two points a Match3 occurs
-    public List<Point> Swap(Point a, Point b)
+    public List<Point> VerifySwap(Point a, Point b)
     {
-        int[,] originalBoard = BoardPieces;
         int aux = BoardPieces[a.row,a.col];
         // SWAP
         BoardPieces[a.row, a.col] = BoardPieces[b.row, b.col];
@@ -179,31 +180,108 @@ public class Board
         
         // SWAP AGAIN 
         int auxB = BoardPieces[a.row, a.col];
-        
         BoardPieces[a.row, a.col] = aux;
         BoardPieces[b.row, b.col] = auxB;
 
         // can be null or the Match3 points 
         return possiblePoints;
     }
-
-    // Erase pieces in specific points in board and apply the cascade effect 
-    public void ErasePieces(List<Point> pointsToErase)
+    
+    // Swap to pieces in the model board 
+    public void Swap(Point a, Point b)
     {
-        foreach (Point point in pointsToErase)
-        { 
-            // empty space
-            int row;
-            for (row = point.row; row < rows - 1; row++)
-            {
-                BoardPieces[row, point.col] = BoardPieces[row + 1, point.col];
-            }
-            
-            // add in the last row an random piece 
-            List<int> allPieces = Enumerable.Range(1, _numberOfPieces).ToList();
-            BoardPieces[row, point.col] = allPieces[Random.Range(0, allPieces.Count)];;
-        }
+        int aux = BoardPieces[a.row,a.col];
+        // SWAP
+        BoardPieces[a.row, a.col] = BoardPieces[b.row, b.col];
+        BoardPieces[b.row, b.col] = aux;
     }
 
-    
+    // Erase pieces in specific points in board and apply the cascade effect 
+    public List<Point> ErasePieces(List<Point> pointsToErase)
+    {
+        // only erase if is 3 or mre pieces to erase
+        if(pointsToErase.Count < 3)
+            return null;
+        
+        // position of the new pieces created 
+        List<Point> newPoints = new List<Point>();
+        
+        // all pieces possibilities 
+        List<int> allPieces = Enumerable.Range(1, _numberOfPieces).ToList();
+        
+        // discover if its a row match3 or a column match3
+        if (pointsToErase[0].col == pointsToErase[1].col)
+        {
+            int higherRow = 0;
+            int lowerRow = Int32.MaxValue;
+            // column match    
+            // get higher row and lower row of the match3 
+            foreach (Point point in pointsToErase)
+            {
+                if (point.row > higherRow)
+                {
+                    higherRow = point.row;
+                }
+
+                if (lowerRow > point.row)
+                {
+                    lowerRow = point.row;
+                }
+            }
+
+            // replace the match values 
+            int above = lowerRow + 3;
+            int currentRow = lowerRow;
+            foreach (Point point in pointsToErase)
+            {
+                if (above < rows)
+                {
+                    BoardPieces[currentRow, point.col] = BoardPieces[above, point.col];
+                }
+                else
+                {
+                    BoardPieces[currentRow, point.col] = allPieces[Random.Range(0, allPieces.Count)];
+                    newPoints.Add(new Point(currentRow,point.col));
+                }
+
+                above += 1;
+                currentRow++;
+            }
+
+            int row;
+            // all points in match have the same col in this case 
+            int communColumn = pointsToErase[0].col;
+            
+            // update the model for the cascade effect 
+            for (row = higherRow + 1; row < rows - 1; row++)
+            {
+                BoardPieces[row, communColumn] = BoardPieces[row + 1, communColumn];
+            }
+            
+            BoardPieces[row, communColumn] = allPieces[Random.Range(0, allPieces.Count)];
+            newPoints.Add(new Point(row,communColumn));
+        }
+        else if (pointsToErase[0].row == pointsToErase[1].row)
+        {
+            // row match
+            foreach (Point point in pointsToErase)
+            { 
+                // empty space
+                int row;
+                for (row = point.row; row < rows - 1; row++)
+                {
+                    BoardPieces[row, point.col] = BoardPieces[row + 1, point.col];
+                }
+            
+                // add in the last row an random piece 
+                BoardPieces[row, point.col] = allPieces[Random.Range(0, allPieces.Count)];
+                newPoints.Add(new Point(row,point.col));
+            }
+        }
+
+        return newPoints;
+
+    }
+
+
 }
