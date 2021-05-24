@@ -92,14 +92,19 @@ public class BoardHolder : MonoBehaviour
     public void SwapGems(GemComponent gemSelected, GemComponent otherGem)
     {
         // get temporary position 
-        Vector3 originalGemSelectedPosTemp = gemSelected._originalPos;
-        gemSelected._originalPos = otherGem._originalPos;
-        otherGem._originalPos = originalGemSelectedPosTemp;
+        Vector3 originalGemSelectedPosTemp = gemSelected.originalPos;
+        gemSelected.originalPos = otherGem.originalPos;
+        otherGem.originalPos = originalGemSelectedPosTemp;
         
         // update Gems 
         GemComponent tempGem = Gems[gemSelected.positionInBoard.row, gemSelected.positionInBoard.col];
         Gems[gemSelected.positionInBoard.row, gemSelected.positionInBoard.col] = otherGem;
         Gems[otherGem.positionInBoard.row, otherGem.positionInBoard.col] = tempGem;
+        
+        // change position in board 
+        Point positionInBoardTemp = gemSelected.positionInBoard;
+        gemSelected.positionInBoard = otherGem.positionInBoard;
+        otherGem.positionInBoard = positionInBoardTemp;
         
         // change position 
         StartCoroutine(otherGem.ReturnToOriginalPos());
@@ -109,18 +114,9 @@ public class BoardHolder : MonoBehaviour
     public IEnumerator CascadeEffect(List<Point> points)
     {
         yield return new WaitForSeconds(0.5f);
-        // foreach (Point point in points)
-        // {
-        //     Gems[point.row, point.col].gameObject.GetComponent<SpriteRenderer>().enabled = false; 
-        //     Gems[point.row, point.col].gameObject.GetComponent<CircleCollider2D>().enabled = false;
-        //     
-        //     Debug.Log("Points");
-        //     Debug.Log(point.row);
-        //     Debug.Log(point.col);
-        // }
+        
         if (points[0].col == points[1].col)
         {
-            
             int higherRow = 0;
             int lowerRow = Int32.MaxValue;
             // column match    
@@ -137,9 +133,10 @@ public class BoardHolder : MonoBehaviour
                     lowerRow = point.row;
                 }
                 
-                Gems[point.row, point.col].gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                Gems[point.row, point.col].gameObject.GetComponent<CircleCollider2D>().enabled = false;
-                
+                Gems[point.row, point.col].sp.enabled = false;
+                Gems[point.row, point.col].CircleCollider.enabled = false;
+                Gems[point.row, point.col].dragSpeed = 100f; // in order to rearrange fast invisible gems 
+
             }
         
             // replace the match values 
@@ -149,16 +146,9 @@ public class BoardHolder : MonoBehaviour
             {
                 if (above < rows)
                 {
-                    // Gems[currentRow, point.col] = Gems[above, point.col];
-                    //pointsToChange.Add(new PointsToChange(new Point(currentRow,point.col), new Point(above, point.col)));
                     SwapGems(Gems[currentRow, point.col],Gems[above, point.col] );
                 }
-                else
-                {
-                    //Gems[currentRow, point.col] = allPieces[Random.Range(0, allPieces.Count)];
-                    //newPoints.Add(new Point(currentRow,point.col));
-                }
-        
+
                 above += 1;
                 currentRow++;
             }
@@ -168,15 +158,18 @@ public class BoardHolder : MonoBehaviour
             int communColumn = points[0].col;
             
             // update the model for the cascade effect 
-            for (row = higherRow + 1; row < rows - 1; row++)
+            if (higherRow < rows - 1)
             {
-                //BoardPieces[row, communColumn] = BoardPieces[row + 1, communColumn];
-                SwapGems(Gems[currentRow, communColumn],Gems[above, communColumn] );
-                //pointsToChange.Add(new PointsToChange(new Point(row,communColumn), new Point(row + 1, communColumn)));
+                for (row = higherRow + 1; row < rows; row++)
+                {
+                    if (row + points.Count <= rows - 1)
+                    {
+                        SwapGems(Gems[currentRow, communColumn],Gems[row+points.Count, communColumn] );
+                    }
+                   
+                }
             }
-            
-            //BoardPieces[row, communColumn] = allPieces[Random.Range(0, allPieces.Count)];
-            //newPoints.Add(new Point(row,communColumn));
+  
         }
         else if (points[0].row == points[1].row)
         {
@@ -185,20 +178,36 @@ public class BoardHolder : MonoBehaviour
             { 
                 // empty space
                 int row;
-                Gems[point.row, point.col].gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                Gems[point.row, point.col].gameObject.GetComponent<CircleCollider2D>().enabled = false;
+                Gems[point.row, point.col].sp.enabled = false;
+                Gems[point.row, point.col].CircleCollider.enabled = false;
+                
                 for (row = point.row; row < rows - 1; row++)
                 {
-                    //BoardPieces[row, point.col] = BoardPieces[row + 1, point.col];
-                    //pointsToChange.Add(new PointsToChange(new Point(row,point.col), new Point(row + 1, point.col)));
                     SwapGems(Gems[row, point.col],Gems[row + 1, point.col]);
                 }
-            
-                // add in the last row an random piece 
-                //BoardPieces[row, point.col] = allPieces[Random.Range(0, allPieces.Count)];
-                //newPoints.Add(new Point(row,point.col));
             }
         }
+
+        
+        
+        // update Model
+        List<Point> newPoints = _board.ErasePieces(points);
+
+        yield return new WaitForSeconds(0.5f);
+        // replace the erased pieces with new sprites based on model 
+        foreach (Point newPoint in newPoints)
+        {
+            Sprite gemSprite = gemsSprites[_board.BoardPieces[newPoint.row, newPoint.col] - 1];
+            GemComponent newGem = Gems[newPoint.row, newPoint.col];
+            
+            
+            // enable gem into the game 
+            newGem.sp.enabled = true;
+            newGem.sp.sprite = gemSprite;
+            newGem.CircleCollider.enabled = true;
+            newGem.dragSpeed = newGem.dragSpeedDeafaultValue;
+        }
+        paused = false;
     }
 
 }

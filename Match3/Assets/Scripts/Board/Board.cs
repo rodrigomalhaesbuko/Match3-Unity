@@ -240,7 +240,7 @@ public class Board
                 }
                 else
                 {
-                    BoardPieces[currentRow, point.col] = allPieces[Random.Range(0, allPieces.Count)];
+                    BoardPieces[currentRow, point.col] = allPieces[Random.Range(0, allPieces.Count - 1)];
                     newPoints.Add(new Point(currentRow,point.col));
                 }
 
@@ -248,18 +248,26 @@ public class Board
                 currentRow++;
             }
 
-            int row;
+            // update pieces above match3 vertical 
             // all points in match have the same col in this case 
-            int communColumn = pointsToErase[0].col;
+            int commonColumn = pointsToErase[0].col;
             
-            // update the model for the cascade effect 
-            for (row = higherRow + 1; row < rows - 1; row++)
+            if (higherRow < rows - 1) 
             {
-                BoardPieces[row, communColumn] = BoardPieces[row + 1, communColumn];
+                for (int row = higherRow + 1 ; row < rows; row++)
+                {
+                    if (row + pointsToErase.Count > rows - 1)
+                    {
+                        BoardPieces[row, commonColumn] = allPieces[Random.Range(0, allPieces.Count - 1)];
+                        newPoints.Add(new Point(row,commonColumn));
+                    }
+                    else
+                    {
+                        BoardPieces[row, commonColumn] = BoardPieces[row + pointsToErase.Count , commonColumn];
+                    }
+                    
+                }
             }
-            
-            BoardPieces[row, communColumn] = allPieces[Random.Range(0, allPieces.Count)];
-            newPoints.Add(new Point(row,communColumn));
         }
         else if (pointsToErase[0].row == pointsToErase[1].row)
         {
@@ -274,7 +282,7 @@ public class Board
                 }
             
                 // add in the last row an random piece 
-                BoardPieces[row, point.col] = allPieces[Random.Range(0, allPieces.Count)];
+                BoardPieces[row, point.col] = allPieces[Random.Range(0, allPieces.Count - 1)];
                 newPoints.Add(new Point(row,point.col));
             }
         }

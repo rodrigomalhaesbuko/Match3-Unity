@@ -32,6 +32,7 @@ public class BoardTests
    {
       Board board = new Board(3, 4, 4);
       // PrintBoard(board); // debug option to show the board 
+      
       // Dont match3 test 
       Assert.That(board.CheckMatch3(), Is.EqualTo(null));
       
@@ -44,7 +45,7 @@ public class BoardTests
       points.Add(new Point(0,0));
       points.Add(new Point(0,1));
       points.Add(new Point(0,2));
-      // PrintBoard(board); // debug option to show the board 
+      
       Assert.That(board.CheckMatch3(), Is.EqualTo(points));
       
       // Vertical test
@@ -56,7 +57,7 @@ public class BoardTests
       pointsB.Add(new Point(0,0));
       pointsB.Add(new Point(1,0));
       pointsB.Add(new Point(2,0));
-      // PrintBoard(board); // debug option to show the board 
+ 
       Assert.That(board.CheckMatch3(), Is.EqualTo(pointsB));
    }
 
@@ -82,7 +83,6 @@ public class BoardTests
       board.cols = 3;
       board.rows = 3;
       
-      //PrintBoard(board); // debug option to show the board 
       Assert.That(board.CheckImpossibleBoard, Is.EqualTo(false));
       
       // Swap horizontal 
@@ -107,9 +107,8 @@ public class BoardTests
       board.cols = 3;
       board.rows = 4;
       
-      //PrintBoard(board); // debug option to show the board 
       Assert.That(board.VerifySwap(new Point(0,0),new Point(1,0)) != null, Is.EqualTo(true));
-      //PrintBoard(board); // debug option to show the board 
+  
       
       // Swap horizontal 
       Board boardB = new Board(3, 4, 4);
@@ -153,7 +152,6 @@ public class BoardTests
       
       // newPoints test
       Assert.That(newPoints, Is.EqualTo(expectedNewPoints));
-      
       
       // verify vertical erase of points 
       Board boardB = new Board(9, 4, 4);

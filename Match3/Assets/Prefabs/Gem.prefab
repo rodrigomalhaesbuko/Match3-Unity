@@ -98,7 +98,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoardHolder: {fileID: 0}
-  dragSpeed: 8
+  dragSpeed: 12
+  originalPos: {x: 0, y: 0, z: 0}
+  sp: {fileID: 0}
+  CircleCollider: {fileID: 0}
 --- !u!50 &8170184284197869797
 Rigidbody2D:
   serializedVersion: 4

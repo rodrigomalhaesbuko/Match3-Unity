@@ -12,8 +12,13 @@ public class GemComponent : MonoBehaviour
     private Camera _mainCamera;
 
     
+    // Variables used in boardHolder
+    [HideInInspector] public Vector3 originalPos;
+    [HideInInspector] public float dragSpeedDeafaultValue;
+    [HideInInspector] public SpriteRenderer sp;
+    [HideInInspector] public CircleCollider2D CircleCollider;
+    // private variables 
     private Transform _transform;
-    public Vector3 _originalPos;
     private Vector3 _originalLocalScale;
     private bool _isSelected;
     private float _xOffset;
@@ -25,12 +30,15 @@ public class GemComponent : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        //load component values 
         _mainCamera = Camera.main;
-       
         _isSelected = false;
         _transform = transform;
-        _originalPos = _transform.position;
+        originalPos = _transform.position;
         _originalLocalScale = _transform.localScale;
+        sp = gameObject.GetComponent<SpriteRenderer>();
+        CircleCollider = gameObject.GetComponent<CircleCollider2D>();
+        dragSpeedDeafaultValue = dragSpeed;
         
         // offsets to check touch position
         Bounds spriteRendererBounds = gameObject.GetComponent<SpriteRenderer>().bounds;
@@ -138,7 +146,6 @@ public class GemComponent : MonoBehaviour
         if (selected)
         {
             _isSelected = true;
-            // change z position 
             Debug.Log("GemPos");
             Debug.Log(positionInBoard.row);
             Debug.Log(positionInBoard.col);
@@ -167,9 +174,9 @@ public class GemComponent : MonoBehaviour
     public IEnumerator ReturnToOriginalPos()
     {
         float step = dragSpeed * Time.fixedDeltaTime;
-        while (_transform.position != _originalPos)
+        while (_transform.position != originalPos)
         {
-            _transform.position = Vector3.MoveTowards(_transform.position, _originalPos, step);
+            _transform.position = Vector3.MoveTowards(_transform.position, originalPos, step);
             yield return new WaitForEndOfFrame();
         }
     }
