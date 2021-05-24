@@ -248,6 +248,7 @@ MonoBehaviour:
   columns: 6
   yOffset: 2.5
   xOffset: 2.5
+  timeBetweenMatches: 1
   paused: 0
 --- !u!4 &904181837
 Transform:

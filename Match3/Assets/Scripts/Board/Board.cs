@@ -84,7 +84,7 @@ public class Board
     public List<Point> CheckMatch3()
     {
         List<Point> points = new List<Point>();
-       
+        int matchPiece = 0; 
         for (int i = 0; i < cols; i++)
         {
             for (int j = 0; j < rows; j++)
@@ -100,12 +100,30 @@ public class Board
                     int leftPiece = BoardPieces[j, i - 1];
                     int rightPiece = BoardPieces[j, i + 1];
                     
-                    if ( middlePiece == leftPiece && middlePiece == rightPiece)
+                    if ( middlePiece == leftPiece && middlePiece == rightPiece && (middlePiece == matchPiece || matchPiece == 0))
                     {
                         // its a match 3 
                         points.Add(new Point(j,i-1));
                         points.Add(new Point(j,i));
                         points.Add(new Point(j,i + 1));
+                        
+                        // check for a bigger match in left 
+                        for (int k = i-2; k >= 0; k--)
+                        {
+                            if(BoardPieces[j,k] == middlePiece)
+                                points.Add(new Point(j,k));
+                            else
+                                break;
+                        }
+                        
+                        // check for a bigger match in right 
+                        for (int k = i+2; k < cols; k++)
+                        {
+                            if(BoardPieces[j,k] == middlePiece)
+                                points.Add(new Point(j,k));
+                            else
+                                break;
+                        }
                         return points;
                     }
                 }
@@ -118,12 +136,31 @@ public class Board
                     int upPiece = BoardPieces[j + 1, i];
                     int downPiece = BoardPieces[j - 1, i];
 
-                    if ( middlePiece == upPiece && middlePiece == downPiece)
+                    if ( middlePiece == upPiece && middlePiece == downPiece && (middlePiece == matchPiece || matchPiece == 0))
                     {
                         // its a match 3 
                         points.Add(new Point(j - 1,i));
                         points.Add(new Point(j,i));
                         points.Add(new Point(j + 1,i));
+                        // check for a bigger match in left 
+                        for (int k = j-2; k >= 0; k--)
+                        {
+                            if (BoardPieces[k, i] == middlePiece)
+                                points.Add(new Point(j,k));
+                            else
+                                break;
+                            
+
+                        }
+                        
+                        // check for a bigger match in right 
+                        for (int k = j+2; k < rows; k++)
+                        {
+                            if(BoardPieces[k,i] == middlePiece)
+                                points.Add(new Point(k,i));
+                            else
+                                break;
+                        }
                         return points;
                     }
                 }
@@ -131,6 +168,7 @@ public class Board
         }
 
         return null;
+
     }
 
     // Verify if there is an possible move for the player 
@@ -230,7 +268,7 @@ public class Board
             }
 
             // replace the match values 
-            int above = lowerRow + 3;
+            int above = lowerRow + pointsToErase.Count;
             int currentRow = lowerRow;
             foreach (Point point in pointsToErase)
             {

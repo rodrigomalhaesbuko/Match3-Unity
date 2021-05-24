@@ -9,10 +9,12 @@ public class BoardHolder : MonoBehaviour
     public GameObject gemPrefab;
     public int rows;
     public int columns;
-    
 
     public float yOffset;
     public float xOffset;
+
+    [Tooltip("Time that the game will be paused wainting for the next match in a chain of matchs")] 
+    public float timeBetweenMatches;
     
     [HideInInspector]
     public GemComponent[,] Gems;
@@ -113,6 +115,7 @@ public class BoardHolder : MonoBehaviour
     
     public IEnumerator CascadeEffect(List<Point> points)
     {
+        // wait piece to move to original position
         yield return new WaitForSeconds(0.5f);
         
         if (points[0].col == points[1].col)
@@ -140,7 +143,7 @@ public class BoardHolder : MonoBehaviour
             }
         
             // replace the match values 
-            int above = lowerRow + 3;
+            int above = lowerRow + points.Count;
             int currentRow = lowerRow;
             foreach (Point point in points)
             {
@@ -155,7 +158,7 @@ public class BoardHolder : MonoBehaviour
         
             int row;
             // all points in match have the same col in this case 
-            int communColumn = points[0].col;
+            int commonColumn = points[0].col;
             
             // update the model for the cascade effect 
             if (higherRow < rows - 1)
@@ -164,7 +167,7 @@ public class BoardHolder : MonoBehaviour
                 {
                     if (row + points.Count <= rows - 1)
                     {
-                        SwapGems(Gems[currentRow, communColumn],Gems[row+points.Count, communColumn] );
+                        SwapGems(Gems[row, commonColumn],Gems[row+points.Count, commonColumn] );
                     }
                    
                 }
@@ -187,27 +190,74 @@ public class BoardHolder : MonoBehaviour
                 }
             }
         }
-
-        
         
         // update Model
         List<Point> newPoints = _board.ErasePieces(points);
 
         yield return new WaitForSeconds(0.5f);
+        // distance that pieces will be dropped on board (2 slots above board)
+        float yDistance = (rows - 4) * yOffset;
+
         // replace the erased pieces with new sprites based on model 
         foreach (Point newPoint in newPoints)
         {
             Sprite gemSprite = gemsSprites[_board.BoardPieces[newPoint.row, newPoint.col] - 1];
             GemComponent newGem = Gems[newPoint.row, newPoint.col];
-            
+            Vector3 posUp = newGem.originalPos;
+            posUp.y += yDistance;
+            newGem.transform.position = posUp;
             
             // enable gem into the game 
             newGem.sp.enabled = true;
             newGem.sp.sprite = gemSprite;
             newGem.CircleCollider.enabled = true;
-            newGem.dragSpeed = newGem.dragSpeedDeafaultValue;
+            newGem.dragSpeed = newGem.dragSpeedDeafaultValue; // Reset to default value 
+            newGem.ChangeSelected(false);
+            
+            // update y distance 
+            yDistance += yOffset;
         }
-        paused = false;
+        
+        yield return new WaitForSeconds(timeBetweenMatches);
+        EndRound();
     }
+
+    // method to know if other match3 happend 
+    private void EndRound()
+    {
+        List<Point> possiblePoints = _board.CheckMatch3();
+        if (possiblePoints != null)
+        {
+            StartCoroutine(CascadeEffect(possiblePoints));
+        }
+        else
+        {
+            // check if the game has possible moves 
+            if (_board.CheckImpossibleBoard())
+            {
+                // create another board and change sprites 
+                _board = new Board(gemsSprites.Count, rows, columns);
+                PopulateGemsSprites();
+            }
+            // unpause the game 
+            paused = false;
+        }
+    }
+
+    private void PopulateGemsSprites()
+    {
+        for (int i = 0; i < _board.cols; i++)
+        {
+            // Y distance between sprites 
+            for (int j = 0; j < _board.rows; j++)
+            {
+                // discover gem sprite (-1 because the pieces vary in range 1..gemsSprites.Count )
+                Sprite gemSprite = gemsSprites[_board.BoardPieces[j, i] - 1];
+                Gems[j, i].sp.sprite = gemSprite;
+            }
+            
+        }
+    }
+    
 
 }

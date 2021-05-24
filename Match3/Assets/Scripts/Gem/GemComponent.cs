@@ -146,9 +146,6 @@ public class GemComponent : MonoBehaviour
         if (selected)
         {
             _isSelected = true;
-            Debug.Log("GemPos");
-            Debug.Log(positionInBoard.row);
-            Debug.Log(positionInBoard.col);
             _transform.localScale *= 1.2f;
         }
         else
