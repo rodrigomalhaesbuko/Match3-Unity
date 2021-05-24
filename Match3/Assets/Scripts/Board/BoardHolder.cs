@@ -13,6 +13,9 @@ public class BoardHolder : MonoBehaviour
     [Tooltip("Time that the game will be paused waiting for the next match in a chain of matches (in seconds)")] 
     public float timeBetweenMatches;
     
+    [Tooltip("Number of rows to be offset in y position")] 
+    public int rowsOffset;
+    
     [HideInInspector]
     public GemComponent[,] Gems;
 
@@ -27,8 +30,33 @@ public class BoardHolder : MonoBehaviour
         _board = new Board(gemsSprites.Count, rows, columns);
         _transform = transform;
         
+        // adjust BoardHolder position 
+        ResolvePosition();
+        
         //populate board 
         PopulateBoard();
+    }
+
+    // Make board fit in screen size 
+    private void ResolvePosition()
+    {
+        Camera mainCamera = Camera.main;
+      
+        float screenHeight = ScreenSize.GetScreenToWorldHeight(mainCamera);
+        float screenWidth = ScreenSize.GetScreenToWorldWidth(mainCamera);
+        Vector3 newBoardHolderPos = _transform.position;
+        
+        // Assumes that Camera pos and boardHolder pos in x :0  y:0
+        newBoardHolderPos.y -= screenHeight * 0.5f;
+        newBoardHolderPos.x -= screenWidth * 0.5f;
+        
+        // padding 
+        newBoardHolderPos.y +=  0.5f * screenHeight/(rows + rowsOffset) ;
+        newBoardHolderPos.x +=  0.5f * screenWidth/columns;
+        
+        // rows offset 
+        newBoardHolderPos.y += rowsOffset * screenHeight/(rows + rowsOffset);
+        _transform.position = newBoardHolderPos;
     }
 
     // Populate board with visual gems 
@@ -50,6 +78,7 @@ public class BoardHolder : MonoBehaviour
                 pos.x += xDistance;
                 pos.y += yDistance;
                 GameObject newGem = Instantiate(gemPrefab, pos, _transform.rotation);
+                newGem.GetComponent<SpriteScaler>().ScaleSprite(rows,columns,rowsOffset);
                 newGem.GetComponent<SpriteRenderer>().sprite = gemSprite;
                 GemComponent newGemComponent = newGem.GetComponent<GemComponent>();
                 spriteSize = newGem.GetComponent<SpriteRenderer>().bounds.size;

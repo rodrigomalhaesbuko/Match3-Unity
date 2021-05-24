@@ -19,7 +19,7 @@ public class GemComponent : MonoBehaviour
     [HideInInspector] public CircleCollider2D CircleCollider;
     // private variables 
     private Transform _transform;
-    private Vector3 _originalLocalScale;
+    public Vector3 _originalLocalScale;
     private bool _isSelected;
     private float _xOffset;
     private float _yOffset;
