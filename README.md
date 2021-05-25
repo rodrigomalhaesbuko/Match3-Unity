@@ -85,34 +85,30 @@ All sprites and UI elements are from [PlayKids/Match3 repository](https://github
 
 ### 4.1. Menu UI
 
-place UI menu 
+![alt text](https://github.com/rodrigomalhaesbuko/Match3-Unity/blob/main/ReadmeImages/MenuUI.png "Menu UI")
 
 ### 4.2. Game UI
 
 The game UI contains information about the round and the player's current score at that time. I chose to place the UI at the top of the screen to act as a status bar for the game.
 
-place Game UI Image 
+![alt text](https://github.com/rodrigomalhaesbuko/Match3-Unity/blob/main/ReadmeImages/5:5S.png "Game UI")
 
 ### 4.3. Scale for multiple resolutions
 
 All UI elements and Sprites are suitable for all portrait resolutions.
 Examples:
 
-#### Iphone 1334x750
+#### iPhone X/XS 2436x1125
 
-place example image 
+![alt text](https://github.com/rodrigomalhaesbuko/Match3-Unity/blob/main/ReadmeImages/XS.png "Iphone X/XS 2436x1125 Test")
 
-#### Iphone X/XS 2436x1125
+#### iPad Pro 2732x2048
 
-place example image 
+![alt text](https://github.com/rodrigomalhaesbuko/Match3-Unity/blob/main/ReadmeImages/IpadPro.png "iPad Pro 2732x2048 Test")
 
-#### Iphone X/XS 2436x1125
+#### iPhone 5/5S/5C/SE 640x1136
 
-place example image 
-
-#### Iphone 5/5S/5C/SE 640x1136
-
-place example image 
+![alt text](https://github.com/rodrigomalhaesbuko/Match3-Unity/blob/main/ReadmeImages/5:5S.png "iPhone 5/5S/5C/SE 640x1136 Test")
 
 ## 5. Tests 
 
@@ -124,11 +120,11 @@ The unit tests in this project were applied onto the Board model (Board.cs). To 
 
 I made an iOS build and played the game on an iPhone 7.
 
-Place gif of iPhone 7 test
+![alt text](https://github.com/rodrigomalhaesbuko/Match3-Unity/blob/main/ReadmeImages/iPhone7Gameplay.gif "Real device  iPhone 7 test")
 
 ## 6. Music and SFX   
 
-Some musics nd SFX are from [PlayKids/Match3 repository](https://github.com/PlayKids/match3-test).
+Some musics and SFX are from [PlayKids/Match3 repository](https://github.com/PlayKids/match3-test).
 All other music and SFX tracks added to the project are royalty-free. 
 
 
