@@ -10,7 +10,7 @@ public class RoundManager : MonoBehaviour
     [Header("Game Rules")]
     public int roundDuration;
     
-    [Tooltip("Total of points that the player needs to achieve to win the each round")] 
+    [Tooltip("The base and first value of points that the player needs to achieve to win each round")] 
     public int baseGoal;
     
     [Tooltip("Time between rounds")] 
@@ -76,7 +76,7 @@ public class RoundManager : MonoBehaviour
         totalPoints += points;
         currentPointsText.text = totalPoints.ToString();
         AudioManager.instance.Play("Clear");
-        if (totalPoints >= totalPointsToGoal)
+        if (totalPoints >= totalPointsToGoal && !gameEnded)
         {
             StartCoroutine(RoundWin());
             StartRound();
@@ -99,6 +99,8 @@ public class RoundManager : MonoBehaviour
         // play music from menu 
         AudioManager.instance.Play("BackgroundMusic");
         StartRound();
+        // unpause game 
+        _boardHolder.paused = false;
     }
 
     private void StartRound()
@@ -114,9 +116,6 @@ public class RoundManager : MonoBehaviour
         _timeRemaining = roundDuration;
         _timerIsRunning = true;
 
-        // unpause the game 
-        _boardHolder.paused = false;
-        
     }
 
     private void EndRound()
@@ -149,7 +148,6 @@ public class RoundManager : MonoBehaviour
     private IEnumerator RoundWin()
     {
         nextRound.SetActive(true);
-        _timerIsRunning = false;
 
         // play next round sound 
         AudioManager.instance.Play("NextRound");
