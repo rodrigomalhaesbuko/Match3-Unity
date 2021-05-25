@@ -7,8 +7,14 @@ using UnityEngine.SceneManagement;
 
 public class ButtonClick : MonoBehaviour
 {
+    [Tooltip("button off sprite")]
     public Sprite OffSprite;
+    
+    [Tooltip("button on sprite")] 
     public Sprite OnSprite;
+
+    [Tooltip("button text")] 
+    public Text btnText;
 
     private Button _button;
 
@@ -23,7 +29,12 @@ public class ButtonClick : MonoBehaviour
             _button.image.sprite = OffSprite;
         else {
             _button.image.sprite = OnSprite;
+            // lower the btn text
+            Vector3 textPos = btnText.rectTransform.position;
+            textPos.y -= _button.image.rectTransform.sizeDelta.y * 0.5f;
+            btnText.rectTransform.position = textPos;
         }
+        AudioManager.instance.Play("ButtonSound");
     }
 
     // re create the game scene to play agai

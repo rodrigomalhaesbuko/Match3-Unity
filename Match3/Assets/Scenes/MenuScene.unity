@@ -808,6 +808,12 @@ MonoBehaviour:
     pitch: 1
     loop: 1
     source: {fileID: 0}
+  - name: YouLose
+    clip: {fileID: 8300000, guid: 8433cf0019c5645b9aca418d88d14e13, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
   soundEffects:
   - name: Select
     clip: {fileID: 8300000, guid: af7621a4f26fb40da9d1b58aeeb6747b, type: 3}
@@ -823,6 +829,18 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Clear
     clip: {fileID: 8300000, guid: 34d46dc11070d4e0da296e795613e0e1, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Countdown
+    clip: {fileID: 8300000, guid: a2088b170738342368eb718cbf1eda55, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: ButtonSound
+    clip: {fileID: 8300000, guid: f3524732f4e01486391c8e39f2e8bf3d, type: 3}
     volume: 0.5
     pitch: 1
     loop: 0
@@ -1163,3 +1181,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OffSprite: {fileID: 21300000, guid: 57ac97a453ca440baa28600b9c757715, type: 3}
   OnSprite: {fileID: 21300000, guid: e3471be9496304b3eb00bc470d311349, type: 3}
+  btnText: {fileID: 1327585482}

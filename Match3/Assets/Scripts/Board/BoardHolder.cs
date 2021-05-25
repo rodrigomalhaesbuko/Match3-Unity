@@ -276,11 +276,17 @@ public class BoardHolder : MonoBehaviour
                 _board = new Board(gemsSprites.Count, rows, columns);
                 PopulateGemsSprites();
             }
+            
+            // if game ended there is no reason to unpause the game
+            if(_roundManager.gameEnded)
+                return;
+            
             // unpause the game 
             paused = false;
         }
     }
 
+    // Populate board with the Gems in the model board 
     private void PopulateGemsSprites()
     {
         for (int i = 0; i < _board.cols; i++)

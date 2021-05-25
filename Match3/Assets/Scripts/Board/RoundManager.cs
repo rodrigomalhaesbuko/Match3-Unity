@@ -29,6 +29,7 @@ public class RoundManager : MonoBehaviour
     // points 
     [HideInInspector] public int totalPoints;
     [HideInInspector] public int totalPointsToGoal;
+    [HideInInspector] public bool gameEnded;
     
     // Board holder reference 
     private BoardHolder _boardHolder;
@@ -38,14 +39,17 @@ public class RoundManager : MonoBehaviour
     {
         // get board holder 
         _boardHolder = gameObject.GetComponent<BoardHolder>();
+        
+        // set variables to a fresh game 
         totalPoints = 0;
         totalPointsToGoal = 0;
         currentPointsText.text = totalPoints.ToString();
         goalPointsText.text = totalPointsToGoal.ToString();
+        gameEnded = false;
         
-        // stop music from menu 
+        // stop music from menu or from end game
         AudioManager.instance.Stop("BackgroundMusic");
-        
+        AudioManager.instance.Stop("YouLose");
         // start cooldown to begin the game 
         StartCoroutine(StartCooldown());
     }
@@ -69,11 +73,14 @@ public class RoundManager : MonoBehaviour
         cooldown.SetActive(true);
         for (int i = 3; i > 0; i--)
         {
+            // play countdown SFX
+            AudioManager.instance.Play("Countdown");
             cooldownText.text = i.ToString();
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
         }
         cooldown.SetActive(false);
-        // stop music from menu 
+        // play music from menu 
         AudioManager.instance.Play("BackgroundMusic");
         StartRound();
     }
@@ -91,8 +98,13 @@ public class RoundManager : MonoBehaviour
 
     private void EndRound()
     {
+        // stop bgm music 
+        AudioManager.instance.Stop("BackgroundMusic");
+        // play you lose sound
+        AudioManager.instance.Play("YouLose");
         // pause the game 
         _boardHolder.paused = true;
+        gameEnded = true;
         
         // appear you lose 
         youLose.SetActive(true);
@@ -110,6 +122,7 @@ public class RoundManager : MonoBehaviour
         highScorePoints.text = lastHighScore.ToString();
     }
 
+    // called when completed a round 
     private IEnumerator RoundWin()
     {
         nextRound.SetActive(true);
@@ -132,7 +145,6 @@ public class RoundManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Time has run out!");
                 _timeRemaining = 0;
                 _timerIsRunning = false;
                 EndRound();
