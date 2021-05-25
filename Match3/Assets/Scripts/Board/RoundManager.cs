@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,9 +27,15 @@ public class RoundManager : MonoBehaviour
     public GameObject youLose;
     public GameObject nextRound;
     public GameObject cooldown;
+    public GameObject shuffle;
     public Text endTotalPoints;
     public Text highScorePoints;
     public Text cooldownText;
+    public Text roundCountText;
+    [Tooltip("Color of timer text in last 30 seconds")] 
+    public Color dangerTimeColor;
+    [Tooltip("default timer text color")] 
+    public Color defaultTimeColor;
 
     // timer variables
     private bool _timerIsRunning = false;
@@ -103,6 +110,7 @@ public class RoundManager : MonoBehaviour
         
         // update values 
         goalPointsText.text = totalPointsToGoal.ToString();
+        roundCountText.text = _roundCount.ToString();
         _timeRemaining = roundDuration;
         _timerIsRunning = true;
 
@@ -178,5 +186,37 @@ public class RoundManager : MonoBehaviour
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
 
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        
+        // activate red text on last 30 seconds 
+        if (minutes == 0 && seconds <= 30)
+        {
+            timerText.color = dangerTimeColor;
+        }
+        else
+        {
+            timerText.color = defaultTimeColor;
+        }
     }
+
+    // called when board needs to shuffle 
+    public void DisplayShufflingWarning()
+    {
+        StartCoroutine(ShuffleUI());
+    }
+    
+    // show shuffle ui
+    private IEnumerator ShuffleUI()
+    {
+        shuffle.SetActive(true);
+        
+        // stop timer when shuffling 
+        _timerIsRunning = false;
+        
+        yield return new WaitForSeconds(2f);
+        
+        shuffle.SetActive(false);
+        _timerIsRunning = true;
+    }
+    
+    
 }

@@ -273,6 +273,8 @@ public class BoardHolder : MonoBehaviour
             // check if the game has possible moves 
             if (_board.CheckImpossibleBoard())
             {
+                // warn player that the board is impossible 
+                _roundManager.DisplayShufflingWarning();
                 // create another board and change sprites 
                 _board = new Board(gemsSprites.Count, rows, columns);
                 PopulateGemsSprites();
