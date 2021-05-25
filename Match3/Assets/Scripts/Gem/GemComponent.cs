@@ -149,6 +149,7 @@ public class GemComponent : MonoBehaviour
             // Debug.Log("Point");
             // Debug.Log(positionInBoard.row);
             // Debug.Log(positionInBoard.col);
+            AudioManager.instance.Play("Select");
             _transform.localScale *= 1.2f;
         }
         else

@@ -11,7 +11,7 @@ public class MenuHandler : MonoBehaviour
     {
         // get highScore from player prefs 
         int highScore = PlayerPrefs.GetInt("HighScore");
-        
+        AudioManager.instance.Play("BackgroundMusic");
         //update highScore on menu screen 
         highScorePoints.text = highScore.ToString();
     }

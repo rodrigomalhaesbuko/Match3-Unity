@@ -42,6 +42,11 @@ public class RoundManager : MonoBehaviour
         totalPointsToGoal = 0;
         currentPointsText.text = totalPoints.ToString();
         goalPointsText.text = totalPointsToGoal.ToString();
+        
+        // stop music from menu 
+        AudioManager.instance.Stop("BackgroundMusic");
+        
+        // start cooldown to begin the game 
         StartCoroutine(StartCooldown());
     }
 
@@ -50,6 +55,7 @@ public class RoundManager : MonoBehaviour
     {
         totalPoints += points;
         currentPointsText.text = totalPoints.ToString();
+        AudioManager.instance.Play("Clear");
         if (totalPoints >= totalPointsToGoal)
         {
             StartCoroutine(RoundWin());
@@ -67,6 +73,8 @@ public class RoundManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         cooldown.SetActive(false);
+        // stop music from menu 
+        AudioManager.instance.Play("BackgroundMusic");
         StartRound();
     }
 

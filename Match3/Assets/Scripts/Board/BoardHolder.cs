@@ -116,7 +116,7 @@ public class BoardHolder : MonoBehaviour
             paused = true;
             // Swap in  board model 
             _board.Swap(gemSelected.positionInBoard,otherGem.positionInBoard);
-            
+            AudioManager.instance.Play("Swap");
             // erase 
             StartCoroutine(CascadeEffect(possiblePoints));
         }
