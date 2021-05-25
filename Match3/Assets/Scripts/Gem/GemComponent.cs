@@ -166,7 +166,14 @@ public class GemComponent : MonoBehaviour
         if (_isSelected)
         {
             GemComponent otherGemComponent = other.gameObject.GetComponent<GemComponent>();
-            BoardHolder.CheckMatch3(this,otherGemComponent);
+            // check if is not a diagonal 
+            if(positionInBoard.row != otherGemComponent.positionInBoard.row && positionInBoard.col != otherGemComponent.positionInBoard.col)
+                ChangeSelected(false);
+            else
+            {
+                BoardHolder.CheckMatch3(this,otherGemComponent);
+            }
+           
         }
 
     }
