@@ -15,6 +15,9 @@ public class RoundManager : MonoBehaviour
     [Tooltip("Time between rounds")] 
     public float nextRoundTime;
     
+    // counter to make game progression
+    private int _roundCount;
+    
     // UI objects to change 
     [Header("UI elements")] 
     public Text timerText;
@@ -51,6 +54,7 @@ public class RoundManager : MonoBehaviour
         currentPointsText.text = totalPoints.ToString();
         goalPointsText.text = totalPointsToGoal.ToString();
         gameEnded = false;
+        _roundCount = 0;
         
         // stop music from menu or from end game
         AudioManager.instance.Stop("BackgroundMusic");
@@ -68,6 +72,7 @@ public class RoundManager : MonoBehaviour
         if (totalPoints >= totalPointsToGoal)
         {
             StartCoroutine(RoundWin());
+            StartRound();
         }
     }
 
@@ -91,13 +96,19 @@ public class RoundManager : MonoBehaviour
 
     private void StartRound()
     {
-        totalPointsToGoal += baseGoal;
+        // make game progression 
+        int progression = _roundCount * (int)Mathf.Log(totalPoints,2);
+        totalPointsToGoal += baseGoal + progression;
+        _roundCount++;
+        
+        // update values 
         goalPointsText.text = totalPointsToGoal.ToString();
         _timeRemaining = roundDuration;
         _timerIsRunning = true;
-        
+
         // unpause the game 
         _boardHolder.paused = false;
+        
     }
 
     private void EndRound()
@@ -138,7 +149,6 @@ public class RoundManager : MonoBehaviour
         yield return new WaitForSeconds(nextRoundTime);
         
         nextRound.SetActive(false);
-        StartRound();
     }
     
     void Update()
