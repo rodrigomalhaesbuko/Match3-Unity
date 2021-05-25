@@ -146,9 +146,6 @@ public class GemComponent : MonoBehaviour
         if (selected)
         {
             _isSelected = true;
-            // Debug.Log("Point");
-            // Debug.Log(positionInBoard.row);
-            // Debug.Log(positionInBoard.col);
             AudioManager.instance.Play("Select");
             _transform.localScale *= 1.2f;
         }
