@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &217194925311692376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 217194925311692382}
+  - component: {fileID: 217194925311692383}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &217194925311692382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217194925311692376}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.7205431, y: -4.8432994, z: -18.975222}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &217194925311692383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217194925311692376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64d32d528fba4993ace5b22ad6d66b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: BackgroundMusic
+    clip: {fileID: 8300000, guid: 55b38d70a383c4f4d8c638746101df8b, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: YouLose
+    clip: {fileID: 8300000, guid: 8433cf0019c5645b9aca418d88d14e13, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  soundEffects:
+  - name: Select
+    clip: {fileID: 8300000, guid: af7621a4f26fb40da9d1b58aeeb6747b, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Swap
+    clip: {fileID: 8300000, guid: ae7e4f242af0a4cf5a9f98fcf654f0ca, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Clear
+    clip: {fileID: 8300000, guid: 34d46dc11070d4e0da296e795613e0e1, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Countdown
+    clip: {fileID: 8300000, guid: a2088b170738342368eb718cbf1eda55, type: 3}
+    volume: 0.5
+    pitch: 1.5
+    loop: 0
+    source: {fileID: 0}
+  - name: ButtonSound
+    clip: {fileID: 8300000, guid: f3524732f4e01486391c8e39f2e8bf3d, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: NextRound
+    clip: {fileID: 8300000, guid: 626175862111a48289751423399c99ec, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Error
+    clip: {fileID: 8300000, guid: 67d1bdd9604d441dba420cbbc0c4db11, type: 3}
+    volume: 0.5
+    pitch: 1.8
+    loop: 0
+    source: {fileID: 0}

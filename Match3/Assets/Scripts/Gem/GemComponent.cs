@@ -167,8 +167,13 @@ public class GemComponent : MonoBehaviour
         {
             GemComponent otherGemComponent = other.gameObject.GetComponent<GemComponent>();
             // check if is not a diagonal 
-            if(positionInBoard.row != otherGemComponent.positionInBoard.row && positionInBoard.col != otherGemComponent.positionInBoard.col)
+            if (positionInBoard.row != otherGemComponent.positionInBoard.row &&
+                positionInBoard.col != otherGemComponent.positionInBoard.col)
+            {
+                // make fail sound 
+                AudioManager.instance.Play("Error");
                 ChangeSelected(false);
+            }
             else
             {
                 BoardHolder.CheckMatch3(this,otherGemComponent);

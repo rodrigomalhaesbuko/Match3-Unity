@@ -107,6 +107,7 @@ public class BoardHolder : MonoBehaviour
             // return gem to original pos and deselect
             gemSelected.ChangeSelected(false);
             // make fail sound 
+            AudioManager.instance.Play("Error");
         }
         else
         {
