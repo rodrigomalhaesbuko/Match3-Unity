@@ -56,7 +56,7 @@ public class BoardHolder : MonoBehaviour
         newBoardHolderPos.x -= screenWidth * 0.5f;
         
         // padding 
-        newBoardHolderPos.y +=  0.5f * screenHeight/(rows + rowsOffset) ;
+        newBoardHolderPos.y +=  0.5f * screenHeight/(rows + rowsOffset);
         newBoardHolderPos.x +=  0.5f * screenWidth/columns;
         
         _transform.position = newBoardHolderPos;

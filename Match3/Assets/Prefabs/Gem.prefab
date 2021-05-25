@@ -99,11 +99,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoardHolder: {fileID: 0}
-  dragSpeed: 15
+  dragSpeed: 10
+  isDummyGem: 0
   originalPos: {x: 0, y: 0, z: 0}
   dragSpeedDeafaultValue: 0
   sp: {fileID: 0}
   CircleCollider: {fileID: 0}
+  _originalLocalScale: {x: 0, y: 0, z: 0}
 --- !u!50 &8170184284197869797
 Rigidbody2D:
   serializedVersion: 4
@@ -153,3 +155,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b9fd26ce0f84391aa86a8953fe9cbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBackground: 0

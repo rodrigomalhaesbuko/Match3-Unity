@@ -9,9 +9,14 @@ public class MenuHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Stop Lose audio 
+        AudioManager.instance.Stop("YouLose");
+        // Play BGM 
+        AudioManager.instance.Play("BackgroundMusic");
+        
         // get highScore from player prefs 
         int highScore = PlayerPrefs.GetInt("HighScore");
-        AudioManager.instance.Play("BackgroundMusic");
+        
         //update highScore on menu screen 
         highScorePoints.text = highScore.ToString();
     }

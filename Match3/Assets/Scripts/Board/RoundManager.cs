@@ -6,9 +6,14 @@ using UnityEngine.UI;
 public class RoundManager : MonoBehaviour
 {
     // Rules 
+    [Header("Game Rules")]
     public int roundDuration;
+    
     [Tooltip("Total of points that the player needs to achieve to win the each round")] 
     public int baseGoal;
+    
+    [Tooltip("Time between rounds")] 
+    public float nextRoundTime;
     
     // UI objects to change 
     [Header("UI elements")] 
@@ -76,7 +81,6 @@ public class RoundManager : MonoBehaviour
             // play countdown SFX
             AudioManager.instance.Play("Countdown");
             cooldownText.text = i.ToString();
-            //yield return new WaitForSeconds(1f);
             yield return new WaitForSecondsRealtime(1f);
         }
         cooldown.SetActive(false);
@@ -127,10 +131,13 @@ public class RoundManager : MonoBehaviour
     {
         nextRound.SetActive(true);
         _timerIsRunning = false;
-        _boardHolder.paused = true;
-        yield return new WaitForSeconds(1f);
+
+        // play next round sound 
+        AudioManager.instance.Play("NextRound");
+        
+        yield return new WaitForSeconds(nextRoundTime);
+        
         nextRound.SetActive(false);
-        _boardHolder.paused = false;
         StartRound();
     }
     

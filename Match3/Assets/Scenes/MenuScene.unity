@@ -836,11 +836,17 @@ MonoBehaviour:
   - name: Countdown
     clip: {fileID: 8300000, guid: a2088b170738342368eb718cbf1eda55, type: 3}
     volume: 0.5
-    pitch: 1
+    pitch: 1.5
     loop: 0
     source: {fileID: 0}
   - name: ButtonSound
     clip: {fileID: 8300000, guid: f3524732f4e01486391c8e39f2e8bf3d, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: NextRound
+    clip: {fileID: 8300000, guid: 626175862111a48289751423399c99ec, type: 3}
     volume: 0.5
     pitch: 1
     loop: 0
